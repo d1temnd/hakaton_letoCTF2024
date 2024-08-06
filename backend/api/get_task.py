@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify
 from .models import db, User, Tasks
+import random
 
 get_task_bp = Blueprint('get_task', __name__)
 
 
-@get_task_bp.route('/api/get_task/<user_id>', methods=['GET'])
+@get_task_bp.route('/api/task/<user_id>', methods=['GET'])
 def get_task(user_id):
     if not user_id:
         return jsonify({'error': 'Missing user_id'}), 404
@@ -19,8 +20,8 @@ def get_task(user_id):
         ~Tasks.id.in_(User.query.with_entities(User.task_id).filter(User.task_id.isnot(None)))).all()
 
     if not available_tasks:
-        return jsonify({'error': 'No available tasks'}), 404
-
+        # return jsonify({'error': 'No available tasks'}), 404
+        return jsonify({}), 404
     # Выбрать случайное задание из доступных
     task = random.choice(available_tasks)
 

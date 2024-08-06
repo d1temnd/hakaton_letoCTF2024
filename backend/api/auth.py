@@ -17,7 +17,7 @@ def auth():
         return jsonify({'error': 'Missing user_id or username'}), 404
 
     if User.query.filter_by(user_id=user_id).first():
-        return jsonify({'message': 'User already registered'}), 404
+        return jsonify({'message': 'User already registered'}), 200
 
     try:
         new_user = User(user_id=user_id, username=username, task_id=task_id)
