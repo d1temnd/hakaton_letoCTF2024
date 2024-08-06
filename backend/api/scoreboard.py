@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, User
+from .models import db, Users
 
 scoreboard_bp = Blueprint('scoreboard', __name__)
 
@@ -7,7 +7,7 @@ scoreboard_bp = Blueprint('scoreboard', __name__)
 @scoreboard_bp.route('/api/scoreboard', methods=['GET'])
 def get_scoreboard():
     # Получаем список всех пользователей, отсортированных по очкам в порядке убывания
-    users = User.query.order_by(User.score.desc()).all()
+    users = Users.query.order_by(Users.score.desc()).all()
 
     # Формируем ответ
     response = [

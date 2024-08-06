@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, User
+from .models import db, Users
 
 profile_bp = Blueprint('profile', __name__)
 
@@ -7,7 +7,7 @@ profile_bp = Blueprint('profile', __name__)
 @profile_bp.route('/api/profile/<user_id>', methods=['GET'])
 def profile(user_id):
     # Найти пользователя по user_id
-    user = User.query.filter_by(user_id=user_id).first()
+    user = Users.query.filter_by(user_id=user_id).first()
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
@@ -17,7 +17,7 @@ def profile(user_id):
 
     # Найти позицию пользователя в общем рейтинге
     # Сначала получаем всех пользователей, отсортированных по score в порядке убывания
-    users = User.query.order_by(User.score.desc()).all()
+    users = Users.query.order_by(Users.score.desc()).all()
 
     # Определяем позицию пользователя
     position = next((index + 1 for index, u in enumerate(users) if u.user_id == user_id), None)

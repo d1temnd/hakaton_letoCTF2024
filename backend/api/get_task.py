@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, User, Tasks
+from .models import db, Users, Tasks
 import random
 
 get_task_bp = Blueprint('get_task', __name__)
@@ -11,13 +11,13 @@ def get_task(user_id):
         return jsonify({'error': 'Missing user_id'}), 404
 
     # Найти пользователя с данным user_id
-    user = User.query.filter_by(user_id=user_id).first()
+    user = Users.query.filter_by(user_id=user_id).first()
     if not user:
         return jsonify({'error': 'User not found'}), 404
 
     # Найти все задания, которые не назначены ни одному пользователю
     available_tasks = Tasks.query.filter(
-        ~Tasks.id.in_(User.query.with_entities(User.task_id).filter(User.task_id.isnot(None)))).all()
+        ~Tasks.id.in_(Users.query.with_entities(Users.task_id).filter(Users.task_id.isnot(None)))).all()
 
     if not available_tasks:
         # return jsonify({'error': 'No available tasks'}), 404
@@ -26,12 +26,12 @@ def get_task(user_id):
     task = random.choice(available_tasks)
 
     # Проверить, сколько пользователей уже имеют это задание
-    assigned_users = User.query.filter_by(task_id=task.id).all()
+    assigned_users = Users.query.filter_by(task_id=task.id).all()
     if len(assigned_users) >= 2:
         return jsonify({'error': 'Task already assigned to two users'}), 404
 
     # Найти случайного пользователя с task_id = None и который не является текущим пользователем
-    random_user = User.query.filter(User.task_id.is_(None), User.id != user.id).order_by(func.random()).first()
+    random_user = Users.query.filter(Users.task_id.is_(None), Users.id != user.id).order_by(func.random()).first()
     if not random_user:
         return jsonify({'error': 'No available users to assign task'}), 404
 

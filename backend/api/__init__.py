@@ -3,6 +3,7 @@ from .auth import auth_bp
 from .scoreboard import scoreboard_bp
 from .get_task import get_task_bp
 from .profile import profile_bp
+from .admin_start_game import admin_start_game_bp
 
 
 def register_routes(app):
@@ -10,3 +11,4 @@ def register_routes(app):
     app.register_blueprint(scoreboard_bp)
     app.register_blueprint(get_task_bp)
     app.register_blueprint(profile_bp)
+    app.register_blueprint(admin_start_game_bp)

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, User
+from .models import db, Users
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -16,11 +16,11 @@ def auth():
     if not user_id or not username:
         return jsonify({'error': 'Missing user_id or username'}), 404
 
-    if User.query.filter_by(user_id=user_id).first():
+    if Users.query.filter_by(user_id=user_id).first():
         return jsonify({'message': 'User already registered'}), 200
 
     try:
-        new_user = User(user_id=user_id, username=username, task_id=task_id)
+        new_user = Users(user_id=user_id, username=username, task_id=task_id)
         db.session.add(new_user)
         db.session.commit()
         return jsonify({'message': 'User registered successfully!'}), 200
