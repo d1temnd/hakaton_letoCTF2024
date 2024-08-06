@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import db, Users, Tasks
+from .models import db, Users, Tasks, Votes
 import random
 import json
 
@@ -10,6 +10,7 @@ admin_start_game_bp = Blueprint('admin_start_game', __name__)
 def admin_start_game():
     # Найти пользователя с данным user_id
     db.session.query(Tasks).delete()
+    db.session.query(Votes).delete()
     db.session.commit()
 
     users = Users.query.all()
@@ -24,7 +25,6 @@ def admin_start_game():
         pair = users[i:i + 2]
         if len(pair) == 2:
             pairs.append(pair)
-    print(pairs)
     for pair in pairs:
         user1 = pair[0]
         user2 = pair[1]
@@ -57,7 +57,5 @@ def admin_start_game():
         db.session.add(user2)
 
         db.session.commit()
-
-        print(user_task.id)
 
     return jsonify({}), 200

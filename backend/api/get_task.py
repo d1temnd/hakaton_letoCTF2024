@@ -26,7 +26,7 @@ def get_task(user_id):
         return jsonify({'message': f'Something went wrong: {str(e)}'}), 500
 
     return jsonify({
-        'task_id': task.id,
+        'id': task.id,
         'text': task.text,
         'passed': task.passed,
         'file_id': task.file_id

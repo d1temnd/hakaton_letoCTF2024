@@ -11,7 +11,8 @@ def get_users():
     response = [
         {
             'username': user.username,
-            'task_id': user.task_id
+            'task_id': user.task_id,
+            'user_id': user.user_id
 
         }
         for user in users
