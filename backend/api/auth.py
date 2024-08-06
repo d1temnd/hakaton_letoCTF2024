@@ -3,6 +3,7 @@ from .models import db, Users
 
 auth_bp = Blueprint('auth', __name__)
 
+
 @auth_bp.route('/api/auth', methods=['POST'])
 def auth():
     data = request.get_json()

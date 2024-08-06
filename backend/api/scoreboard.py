@@ -9,7 +9,6 @@ def get_scoreboard():
     # Получаем список всех пользователей, отсортированных по очкам в порядке убывания
     users = Users.query.order_by(Users.score.desc()).all()
 
-    # Формируем ответ
     response = [
         {
             'username': user.username,

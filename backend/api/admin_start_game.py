@@ -13,7 +13,6 @@ def admin_start_game():
     if not users:
         return jsonify({'error': 'User not found'}), 404
 
-    # Перемешиваем список пользователей
     random.shuffle(users)
 
     # Создаем пары
@@ -46,7 +45,6 @@ def admin_start_game():
         db.session.commit()
         user1.task_id = usertask.id
         user2.task_id = usertask.id
-
 
         db.session.add(user1)
         db.session.add(user2)

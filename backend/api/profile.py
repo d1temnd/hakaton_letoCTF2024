@@ -25,7 +25,6 @@ def profile(user_id):
     if position is None:
         return jsonify({'error': 'Could not determine position'}), 500
 
-    # Формируем ответ
     response = {
         'username': username,
         'score': score,

@@ -25,7 +25,6 @@ def get_task(user_id):
         db.session.rollback()
         return jsonify({'message': f'Something went wrong: {str(e)}'}), 500
 
-    # Вернуть информацию о задании
     return jsonify({
         'task_id': task.id,
         'text': task.text,
