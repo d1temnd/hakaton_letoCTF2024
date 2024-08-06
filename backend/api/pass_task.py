@@ -28,8 +28,10 @@ def pass_task():
 
     # Обновить file_id в найденном задании
     task.file_id = file_id
+    task.passed = True
 
     try:
+        db.session.add(task)
         db.session.commit()
         return jsonify({'message': 'File ID updated successfully'}), 200
     except Exception as e:

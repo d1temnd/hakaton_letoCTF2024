@@ -6,7 +6,7 @@ import json
 admin_start_game_bp = Blueprint('admin_start_game', __name__)
 
 
-@admin_start_game_bp.route("/api/admin/start_game", methods=['GET', 'POST'])
+@admin_start_game_bp.route("/api/admin/start_game", methods=['POST'])
 def admin_start_game():
     # Найти пользователя с данным user_id
     users = Users.query.all()
