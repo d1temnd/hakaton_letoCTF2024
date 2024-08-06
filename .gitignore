@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 bot/settings.ini
 bot/.vscode/launch.json
+.idea

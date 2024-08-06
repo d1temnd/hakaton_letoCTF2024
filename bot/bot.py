@@ -8,9 +8,12 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import config
 import ui
+import os
 
 # Логирование
 logger = logging.getLogger()
+if not os.path.exists("logs"):
+    os.makedirs("logs")
 filehandler = RotatingFileHandler(
     "logs/bot.log", mode="w", maxBytes=1024 * 1024 * 10, backupCount=2
 )

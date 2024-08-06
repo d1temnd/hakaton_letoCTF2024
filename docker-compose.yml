@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./instance:/instance
+
+  bot:
+    build: ./bot
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - TELEGRAM_TOKEN=7417709543:AAG_WBhGX5LyDRgHXZtBmgdadVyIeljHDNA
+      - ADMIN_ID=1533055929
+      - BACKEND_API_URL=http://backend:5000
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./logs:/logs
