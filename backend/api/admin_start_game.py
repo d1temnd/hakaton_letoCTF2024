@@ -9,6 +9,9 @@ admin_start_game_bp = Blueprint('admin_start_game', __name__)
 @admin_start_game_bp.route("/api/admin/start_game", methods=['POST', 'GET'])
 def admin_start_game():
     # Найти пользователя с данным user_id
+    db.session.query(Tasks).delete()
+    db.session.commit()
+
     users = Users.query.all()
     if not users:
         return jsonify({'error': 'User not found'}), 404
@@ -43,9 +46,6 @@ def admin_start_game():
         task = random.choice(templates)
         text_task = f'{user1.username}, {user2.username}:\n{task}'
         # Выводим пары
-
-        # db.session.query(Tasks).delete()
-        # db.session.commit()
 
         user_task = Tasks(text=text_task)
         db.session.add(user_task)
