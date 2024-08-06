@@ -1,4 +1,5 @@
 import requests
+
 from config import BACKEND_API_URL
 
 
@@ -47,4 +48,9 @@ def send_vote(user_id: int, task_id: int, vote_value: int) -> bool:
 
 def start_game() -> bool:
     response = requests.post(f"{BACKEND_API_URL}/api/admin/start_game")
+    return response.status_code == 200
+
+
+def end_game() -> bool:
+    response = requests.post(f"{BACKEND_API_URL}/api/admin/end_game")
     return response.status_code == 200

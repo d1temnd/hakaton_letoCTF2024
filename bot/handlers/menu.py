@@ -1,12 +1,15 @@
-from aiogram import types, F
+from aiogram import types
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.filters import Command, StateFilter
-from bot import dp, logger, bot, UserStates
-import ui, config
+
 import api
+import ui
+import math
+from bot import bot, logger, router
 
 
-@dp.message(Command(commands="start"))
+# Старт
+@router.message(Command(commands="start"))
 async def start(message: types.Message, state: FSMContext):
     await state.clear()
     await bot.set_my_commands(ui.commands)
@@ -18,7 +21,7 @@ async def start(message: types.Message, state: FSMContext):
             await message.answer(
                 ui.TEXT_MENU.format(
                     username=profile["username"],
-                    score=profile["score"],
+                    score=math.floor(profile["score"]),
                     position=profile["position"],
                 ),
                 reply_markup=ui.keyboard_menu,
@@ -27,17 +30,19 @@ async def start(message: types.Message, state: FSMContext):
             logger.error(f"User {message.from_user.id} not found")
             await message.answer(ui.TEXT_AUTH_FAILED)
     else:
-        logger.info(f"User {message.from_user.id} not authorized")
+        logger.error(f"User {message.from_user.id} not authorized")
         await message.answer(ui.TEXT_AUTH_FAILED)
 
 
-@dp.callback_query(lambda c: c.data == "task")
+# Меню
+@router.callback_query(lambda c: c.data == "task")
 async def process_callback_task(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
 
     task = api.get_task(callback_query.from_user.id)
     if task:
         if task["passed"]:
+            logger.debug(f"User {callback_query.from_user.id} already complete task")
             await bot.edit_message_text(
                 text=ui.TEXT_TASK_PASSED,
                 chat_id=callback_query.from_user.id,
@@ -52,6 +57,7 @@ async def process_callback_task(callback_query: types.CallbackQuery):
                 reply_markup=ui.keyboard_task,
             )
     else:
+        logger.debug(f"User {callback_query.from_user.id} not found")
         await bot.edit_message_text(
             text=ui.TEXT_NO_TASK,
             chat_id=callback_query.from_user.id,
@@ -60,13 +66,14 @@ async def process_callback_task(callback_query: types.CallbackQuery):
         )
 
 
-@dp.callback_query(lambda c: c.data == "scoreboard")
+# Рейтинг
+@router.callback_query(lambda c: c.data == "scoreboard")
 async def process_callback_scoreboard(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
     scoreboard = api.get_scoreboard()
     text_scoreboard = "\n".join(
         [
-            f"{i+1}. {user['username']} - {user['score']}"
+            f"{i+1}. {user['username']} - {math.floor(user['score'])}"
             for i, user in enumerate(scoreboard)
         ]
     )
@@ -78,9 +85,14 @@ async def process_callback_scoreboard(callback_query: types.CallbackQuery):
     )
 
 
-@dp.callback_query(lambda c: c.data == "to_menu")
-async def process_callback_go_back(callback_query: types.CallbackQuery):
+# Назад
+@router.callback_query(lambda c: c.data == "to_menu")
+async def process_callback_go_back(
+    callback_query: types.CallbackQuery, state: FSMContext
+):
     await bot.answer_callback_query(callback_query.id)
+    await state.clear()
+
     profile = api.get_profile(callback_query.from_user.id)
     await bot.edit_message_text(
         ui.TEXT_MENU.format(

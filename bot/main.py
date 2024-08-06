@@ -1,5 +1,5 @@
 import bot
-# import middlewares
+import middlewares
 import handlers
 
 if __name__ == "__main__":

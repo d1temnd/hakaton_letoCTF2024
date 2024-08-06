@@ -1,22 +1,22 @@
+import asyncio
 import logging
 from logging.handlers import RotatingFileHandler
 
-from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram import Bot, Dispatcher, Router
 from aiogram.fsm.state import State, StatesGroup
-import asyncio
+from aiogram.fsm.storage.memory import MemoryStorage
 
 import config
 import ui
 
 # Логирование
 logger = logging.getLogger()
-# filehandler = RotatingFileHandler(
-#     "bot.log", mode="w", maxBytes=1024 * 1024 * 10, backupCount=2
-# )
-# filehandler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-# logger.setLevel(logging.DEBUG)
-# logger.addHandler(filehandler)
+filehandler = RotatingFileHandler(
+    "logs/bot.log", mode="w", maxBytes=1024 * 1024 * 10, backupCount=2
+)
+filehandler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+logger.setLevel(logging.DEBUG)
+logger.addHandler(filehandler)
 
 # Хранилище состояний
 storage = MemoryStorage()
@@ -24,10 +24,13 @@ storage = MemoryStorage()
 # Бот токен
 bot = Bot(token=config.TELEGRAM_TOKEN)
 
-# Диспетчер для бота
+# Диспетчер и роут для бота
 dp = Dispatcher(bot=bot, storage=storage)
+router = Router()
+dp.include_router(router)
 
 
+# Состояния бота
 class UserStates(StatesGroup):
     pass_task = State()
 

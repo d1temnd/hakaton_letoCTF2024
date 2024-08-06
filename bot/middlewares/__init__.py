@@ -1,4 +1,4 @@
-from bot import dp
+from bot import router
 from middlewares.throttling import ThrottlingMiddleware
 
-dp.middleware.setup(ThrottlingMiddleware(limit=0.5))
+router.message.middleware(ThrottlingMiddleware(sleep_sec=1))
