@@ -22,32 +22,37 @@ def admin_start_game():
         pair = users[i:i + 2]
         if len(pair) == 2:
             pairs.append(pair)
-    #
-    # for pain in pairs:
-    #     user1 = users[0]
-    #     user2 = users[1]
-    #     print(user2, user1['username'])
-    #
-    #     with open('words/task.json', encoding="utf-8") as f:
-    #         data = json.load(f)
-    #
-    #     obj = random.choice(data["object"])
-    #     selected_prop = random.choice(list(obj["prop"].keys()))
-    #
-    #     action = random.choice(data["action"])
-    #     place = random.choice(data["place"])
-    #     prop = random.choice(obj["prop"][selected_prop])
-    #     obj = random.choice(obj["obj"])
-    #
-    #     text_task = f'''{user1['username']}, {user2['username']}:
-    #         Действие: {action}.
-    #         Объект: {prop} {obj}.
-    #         Место: {place}.'''
-    #     # Выводим пары
-    #
-    #     usertask = Tasks(text=text_task)
-    #     db.session.commit()
-    #     print(usertask)
-    #
-    # print(pairs)
+    print(pairs)
+    for pair in pairs:
+        user1 = pair[0]
+        user2 = pair[1]
+
+        with open('words/task.json', encoding="utf-8") as f:
+            data = json.load(f)
+
+        obj = random.choice(data["object"])
+        selected_prop = random.choice(list(obj["prop"].keys()))
+
+        action = random.choice(data["action"])
+        place = random.choice(data["place"])
+        prop = random.choice(obj["prop"][selected_prop])
+        obj = random.choice(obj["obj"])
+
+        text_task = f'{user1.username}, {user2.username}:\nДействие: {action}.\nОбъект: {prop} {obj}.\nМесто: {place}.'
+        # Выводим пары
+
+        usertask = Tasks(text=text_task)
+        db.session.add(usertask)
+        db.session.commit()
+        user1.task_id = usertask.id
+        user2.task_id = usertask.id
+
+
+        db.session.add(user1)
+        db.session.add(user2)
+
+        db.session.commit()
+
+        print(usertask.id)
+
     return jsonify({}), 200

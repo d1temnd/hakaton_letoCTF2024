@@ -29,7 +29,8 @@ def profile(user_id):
     response = {
         'username': username,
         'score': score,
-        'position': position
+        'position': position,
+        'task_id': user.task_id
     }
 
     return jsonify(response), 200
