@@ -26,7 +26,7 @@ def profile(user_id):
         return jsonify({'error': 'Could not determine position'}), 500
 
     response = {
-        'username': username,
+        'username': '@'+username,
         'score': score,
         'position': position,
         'task_id': user.task_id

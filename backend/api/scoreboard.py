@@ -11,7 +11,7 @@ def get_scoreboard():
 
     response = [
         {
-            'username': user.username,
+            'username': '@'+user.username,
             'user_id': user.user_id,
             'score': user.score
         }

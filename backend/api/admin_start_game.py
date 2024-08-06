@@ -16,7 +16,9 @@ def admin_start_game():
     users = Users.query.all()
     if not users:
         return jsonify({'error': 'User not found'}), 404
-
+    for user in users:
+        user.task_id = None
+    db.session.commit()
     random.shuffle(users)
 
     # Создаем пары
@@ -44,7 +46,7 @@ def admin_start_game():
         ]
 
         task = random.choice(templates)
-        text_task = f'{user1.username}, {user2.username}:\n{task}'
+        text_task = f'@{user1.username}, @{user2.username}:\n{task}'
         # Выводим пары
 
         user_task = Tasks(text=text_task)
