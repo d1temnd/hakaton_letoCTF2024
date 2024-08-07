@@ -1,6 +1,5 @@
 # hakaton_letoCTF2024
 pieton team
-[@pieton_teamup_bot](https://t.me/pieton_teamup_bot)
 
 социализирующий бот для мероприятий подобных LetoCTF
 
