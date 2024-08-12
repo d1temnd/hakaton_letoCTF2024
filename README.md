@@ -1,6 +1,5 @@
 # hakaton_letoCTF2024
 pieton team
-https://t.me/snaptogether_bot
 
 социализирующий бот для мероприятий подобных LetoCTF
 

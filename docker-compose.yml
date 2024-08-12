@@ -14,7 +14,7 @@ services:
       - backend
     environment:
       - TELEGRAM_TOKEN=TELEGRAM_TOKEN
-      - ADMIN_ID=1533055929
+      - ADMIN_ID=ADMIN_ID
       - BACKEND_API_URL=http://backend:5000
     volumes:
       - /etc/timezone:/etc/timezone:ro
